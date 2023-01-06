@@ -145,8 +145,6 @@ use Carp;
 use PDL::LiteF;
 use PDL::Graphics::ColorSpace::RGBSpace;
 
-$PDL::onlinedoc->scan(__FILE__) if $PDL::onlinedoc;
-
 my $RGB_SPACE = $PDL::Graphics::ColorSpace::RGBSpace::RGB_SPACE;
 
 EOD
