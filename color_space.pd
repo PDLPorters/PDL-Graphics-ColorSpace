@@ -8,6 +8,8 @@ pp_setversion("'$PDL::Graphics::ColorSpace::VERSION'");
 
 pp_addpm({At=>'Top'}, <<'EOD');
 
+=encoding utf8
+
 =head1 NAME
 
 PDL::Graphics::ColorSpace
