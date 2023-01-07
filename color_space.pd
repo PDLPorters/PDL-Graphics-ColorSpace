@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 pp_add_exported('', 'rgb_to_cmyk', 'cmyk_to_rgb', 'hsl_to_rgb', 'rgb_to_hsl', 'rgb_to_hsv', 'hsv_to_rgb', 'rgb_to_xyz', 'xyz_to_rgb', 'xyY_to_xyz', 'xyz_to_lab', 'lab_to_xyz', 'lab_to_lch', 'lch_to_lab', 'rgb_to_lch', 'lch_to_rgb', 'lch_to_lab', 'add_rgb_space');
 
 $PDL::Graphics::ColorSpace::VERSION = '0.201';
@@ -159,20 +157,16 @@ pp_addhdr('
 
 pp_def('rgb_to_cmyk',
     Pars => 'double rgb(c=3); double [o]cmyk(d=4)',
-    Code => '
-        rgb2cmyk($P(rgb), $P(cmyk));
-    ',
-
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
+        PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
             loop (d) %{
                 $SETBAD(cmyk());
             %}
             /* skip to the next cmyk triple */
         }
-        else {
+        else,) {
             rgb2cmyk($P(rgb), $P(cmyk));
         }
     ',
@@ -210,19 +204,16 @@ BADDOC
 
 pp_def('cmyk_to_rgb',
     Pars => 'double cmyk(d=4); double [o]rgb(c=3)',
-    Code => '
-        cmyk2rgb($P(cmyk), $P(rgb));
-    ',
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(cmyk(d=>0)) || $ISBAD(cmyk(d=>1)) || $ISBAD(cmyk(d=>2)) || $ISBAD(cmyk(d=>3))) {
+        PDL_IF_BAD(if ($ISBAD(cmyk(d=>0)) || $ISBAD(cmyk(d=>1)) || $ISBAD(cmyk(d=>2)) || $ISBAD(cmyk(d=>3))) {
             loop (c) %{
                 $SETBAD(rgb());
             %}
             /* skip to the next cmyk triple */
         }
-        else {
+        else,) {
             cmyk2rgb($P(cmyk), $P(rgb));
         }
     ',
@@ -259,20 +250,16 @@ BADDOC
 
 pp_def('rgb_to_hsl',
     Pars => 'double rgb(c=3); double [o]hsl(c=3)',
-    Code => '
-        rgb2hsl($P(rgb), $P(hsl));
-    ',
-
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
+        PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
             loop (c) %{
                 $SETBAD(hsl());
             %}
             /* skip to the next hsl triple */
         }
-        else {
+        else,) {
             rgb2hsl($P(rgb), $P(hsl));
         }
     ',
@@ -310,19 +297,16 @@ BADDOC
 
 pp_def('hsl_to_rgb',
     Pars => 'double hsl(c=3); double [o]rgb(c=3)',
-    Code => '
-        hsl2rgb($P(hsl), $P(rgb));
-    ',
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(hsl(c=>0)) || $ISBAD(hsl(c=>1)) || $ISBAD(hsl(c=>2))) {
+        PDL_IF_BAD(if ($ISBAD(hsl(c=>0)) || $ISBAD(hsl(c=>1)) || $ISBAD(hsl(c=>2))) {
             loop (c) %{
                 $SETBAD(rgb());
             %}
             /* skip to the next hsl triple */
         }
-        else {
+        else,) {
             hsl2rgb($P(hsl), $P(rgb));
         }
     ',
@@ -359,20 +343,16 @@ BADDOC
 
 pp_def('rgb_to_hsv',
     Pars => 'double rgb(c=3); double [o]hsv(c=3)',
-    Code => '
-        rgb2hsv($P(rgb), $P(hsv));
-    ',
-
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
+        PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
             loop (c) %{
                 $SETBAD(hsv());
             %}
             /* skip to the next hsv triple */
         }
-        else {
+        else,) {
             rgb2hsv($P(rgb), $P(hsv));
         }
     ',
@@ -410,20 +390,16 @@ BADDOC
 
 pp_def('hsv_to_rgb',
     Pars => 'double hsv(c=3); double [o]rgb(c=3)',
-    Code => '
-        hsv2rgb($P(hsv), $P(rgb));
-    ',
-
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(hsv(c=>0)) || $ISBAD(hsv(c=>1)) || $ISBAD(hsv(c=>2))) {
+        PDL_IF_BAD(if ($ISBAD(hsv(c=>0)) || $ISBAD(hsv(c=>1)) || $ISBAD(hsv(c=>2))) {
             loop (c) %{
                 $SETBAD(rgb());
             %}
             /* skip to the next rgb triple */
         }
-        else {
+        else,) {
             hsv2rgb($P(hsv), $P(rgb));
         }
     ',
@@ -461,22 +437,17 @@ BADDOC
 
 pp_def('xyY_to_xyz',
     Pars => 'double xyY(c=3); double [o]xyz(c=3)',
-    Code => '
-        xyY2xyz($P(xyY), $P(xyz));
-    ',
-
     Doc => 'Internal function for white point calculation. Use it if you must.',
-
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(xyY(c=>0)) || $ISBAD(xyY(c=>1)) || $ISBAD(xyY(c=>2))) {
+        PDL_IF_BAD(if ($ISBAD(xyY(c=>0)) || $ISBAD(xyY(c=>1)) || $ISBAD(xyY(c=>2))) {
             loop (c) %{
                 $SETBAD(xyz());
             %}
             /* skip to the next hsl triple */
         }
-        else {
+        else,) {
             xyY2xyz($P(xyY), $P(xyz));
         }
     ',
@@ -485,54 +456,46 @@ pp_def('xyY_to_xyz',
 
 pp_def('_rgb_to_xyz',
     Pars => 'double rgb(c=3); double gamma(); double l(i=3); double m(i=3); double n(i=3); double [o]xyz(c=3)',
-    Code => '
-        rgb2xyz($P(rgb), $gamma(), $P(l), $P(m), $P(n), $P(xyz));
-    ',
-
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
+        PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
             loop (c) %{
                 $SETBAD(xyz());
             %}
             /* skip to the next xyz triple */
         }
-        else {
+        else,) {
             rgb2xyz($P(rgb), $gamma(), $P(l), $P(m), $P(n), $P(xyz));
         }
     ',
     Doc => undef,
-    BadDoc => undef,
 );
 
 
 pp_def('_xyz_to_rgb',
     Pars => 'double xyz(c=3); double gamma(); double l(i=3); double m(i=3); double n(i=3); double [o]rgb(c=3)',
-    Code => '
-        xyz2rgb($P(xyz), $gamma(), $P(l), $P(m), $P(n), $P(rgb));
-    ',
-
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(xyz(c=>0)) || $ISBAD(xyz(c=>1)) || $ISBAD(xyz(c=>2))) {
+        PDL_IF_BAD(if ($ISBAD(xyz(c=>0)) || $ISBAD(xyz(c=>1)) || $ISBAD(xyz(c=>2))) {
             loop (c) %{
                 $SETBAD(rgb());
             %}
             /* skip to the next rgb triple */
         }
-        else {
+        else,) {
             xyz2rgb($P(xyz), $gamma(), $P(l), $P(m), $P(n), $P(rgb));
         }
     ',
     Doc => undef,
-    BadDoc => undef,
 );
 
 
 pp_def('_xyz_to_lab',
     Pars => 'double xyz(c=3); double w(d=2);  double [o]lab(c=3)',
+    Doc => undef,
+    HandleBad => 1,
     Code => '
         /* construct white point */
         double xyY[3] = { $w(d=>0), $w(d=>1), 1.0 };
@@ -540,51 +503,27 @@ pp_def('_xyz_to_lab',
         xyY2xyz( &xyY[0], &xyz_white[0] );
 
         threadloop %{
-            xyz2lab( $P(xyz), &xyz_white[0], $P(lab) );
-        %}
-    ',
-    Doc => undef,
-
-    HandleBad => 1,
-    BadCode => '
-        /* construct white point */
-        double xyY[3] = { $w(d=>0), $w(d=>1), 1.0 };
-        double xyz_white[3];
-        xyY2xyz( &xyY[0], &xyz_white[0] );
-
-        threadloop %{
             /* First check for bad values */
-            if ($ISBAD(xyz(c=>0)) || $ISBAD(xyz(c=>1)) || $ISBAD(xyz(c=>2))) {
+            PDL_IF_BAD(if ($ISBAD(xyz(c=>0)) || $ISBAD(xyz(c=>1)) || $ISBAD(xyz(c=>2))) {
                 loop (c) %{
                     $SETBAD(lab());
                 %}
                 /* skip to the next xyz triple */
             }
-            else {
+            else,) {
                 xyz2lab( $P(xyz), &xyz_white[0], $P(lab) );
             }
         %}
     ',
-    BadDoc => undef,
 );
 
 
 pp_def('_lab_to_xyz',
     Pars => 'double lab(c=3); double w(d=2);  double [o]xyz(c=3)',
-    Code => '
-        /* construct white point */
-        double xyY[3] = { $w(d=>0), $w(d=>1), 1.0 };
-        double xyz_white[3];
-        xyY2xyz( &xyY[0], &xyz_white[0] );
-
-        threadloop %{
-            lab2xyz( $P(lab), &xyz_white[0], $P(xyz) );
-        %}
-    ',
     Doc => undef,
 
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* construct white point */
         double xyY[3] = { $w(d=>0), $w(d=>1), 1.0 };
         double xyz_white[3];
@@ -592,37 +531,32 @@ pp_def('_lab_to_xyz',
 
         threadloop %{
             /* First check for bad values */
-            if ($ISBAD(lab(c=>0)) || $ISBAD(lab(c=>1)) || $ISBAD(lab(c=>2))) {
+            PDL_IF_BAD(if ($ISBAD(lab(c=>0)) || $ISBAD(lab(c=>1)) || $ISBAD(lab(c=>2))) {
                 loop (c) %{
                     $SETBAD(xyz());
                 %}
                 /* skip to the next lab triple */
             }
-            else {
+            else,) {
                 lab2xyz( $P(lab), &xyz_white[0], $P(xyz) );
             }
         %}
     ',
-    BadDoc => undef,
 );
 
 
 pp_def('lab_to_lch',
     Pars => 'double lab(c=3); double [o]lch(c=3)',
-    Code => '
-        lab2lch( $P(lab), $P(lch) );
-    ',
-
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(lab(c=>0)) || $ISBAD(lab(c=>1)) || $ISBAD(lab(c=>2))) {
+        PDL_IF_BAD(if ($ISBAD(lab(c=>0)) || $ISBAD(lab(c=>1)) || $ISBAD(lab(c=>2))) {
             loop (c) %{
                 $SETBAD(lch());
             %}
             /* skip to the next lch triple */
         }
-        else {
+        else,) {
             lab2lch( $P(lab), $P(lch) );
         }
     ',
@@ -659,20 +593,16 @@ BADDOC
 
 pp_def('lch_to_lab',
     Pars => 'double lch(c=3); double [o]lab(c=3)',
-    Code => '
-        lch2lab( $P(lch), $P(lab) );
-    ',
-
     HandleBad => 1,
-    BadCode => '
+    Code => '
         /* First check for bad values */
-        if ($ISBAD(lch(c=>0)) || $ISBAD(lch(c=>1)) || $ISBAD(lch(c=>2))) {
+        PDL_IF_BAD(if ($ISBAD(lch(c=>0)) || $ISBAD(lch(c=>1)) || $ISBAD(lch(c=>2))) {
             loop (c) %{
                 $SETBAD(lab());
             %}
             /* skip to the next lab triple */
         }
-        else {
+        else,) {
             lch2lab( $P(lch), $P(lab) );
         }
     ',

@@ -433,7 +433,7 @@ sub add_rgb_space {
 	while (my ($name, $profile) = each %$new_space) {
 		croak "There is an existing RGB space definition with the same name: $name"
 			if $RGB_SPACE->{$name};
-		for (keys %{ $RGB_SPACE->{'sRGB'} }) {
+		for (grep $_ ne 'mstar', keys %{ $RGB_SPACE->{'sRGB'} }) {
 			carp "Missing definition for custom RGB space $name: $_"
 				unless defined $profile->{$_};
 		}
