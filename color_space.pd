@@ -179,7 +179,7 @@ pp_def('rgb_to_cmyk',
 
 Converts an RGB color triple to an CYMK color quadruple.
 
-The first dimension of the piddles holding the rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...). The first dimension of the piddles holding the cmyk values must be size 4.
+The first dimension of the ndarrays holding the rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...). The first dimension of the ndarrays holding the cmyk values must be size 4.
 
 =for usage
 
@@ -194,7 +194,7 @@ DOCUMENTATION
 
 =for bad
 
-If C<rgb_to_cmyk> encounters a bad value in any of the R, G, or B values the output piddle will be marked as bad and the associated C, M, Y, and K values will all be marked as bad.
+If C<rgb_to_cmyk> encounters a bad value in any of the R, G, or B values the output ndarray will be marked as bad and the associated C, M, Y, and K values will all be marked as bad.
 
 =cut
 
@@ -225,7 +225,7 @@ pp_def('cmyk_to_rgb',
 
 Converts an CYMK color quadruple to an RGB color triple
 
-The first dimension of the piddles holding the cmyk values must be size 4, i.e. the dimensions must look like (4, m, n, ...). The first dimension of the piddle holding the rgb values must be 3.
+The first dimension of the ndarrays holding the cmyk values must be size 4, i.e. the dimensions must look like (4, m, n, ...). The first dimension of the ndarray holding the rgb values must be 3.
 
 =for usage
 
@@ -240,7 +240,7 @@ DOCUMENTATION
 
 =for bad
 
-If C<cmyk_to_rgb> encounters a bad value in any of the C, M, Y, or K quantities, the output piddle will be marked as bad and the associated R, G, and B color values will all be marked as bad.
+If C<cmyk_to_rgb> encounters a bad value in any of the C, M, Y, or K quantities, the output ndarray will be marked as bad and the associated R, G, and B color values will all be marked as bad.
 
 =cut
 
@@ -272,7 +272,7 @@ pp_def('rgb_to_hsl',
 
 Converts an RGB color triple to an HSL color triple.
 
-The first dimension of the piddles holding the hsl and rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the hsl and rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for usage
 
@@ -287,7 +287,7 @@ DOCUMENTATION
 
 =for bad
 
-If C<rgb_to_hsl> encounters a bad value in any of the R, G, or B values the output piddle will be marked as bad and the associated H, S, and L values will all be marked as bad.
+If C<rgb_to_hsl> encounters a bad value in any of the R, G, or B values the output ndarray will be marked as bad and the associated H, S, and L values will all be marked as bad.
 
 =cut
 
@@ -318,7 +318,7 @@ pp_def('hsl_to_rgb',
 
 Converts an HSL color triple to an RGB color triple
 
-The first dimension of the piddles holding the hsl and rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the hsl and rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for usage
 
@@ -333,7 +333,7 @@ DOCUMENTATION
 
 =for bad
 
-If C<hsl_to_rgb> encounters a bad value in any of the H, S, or V quantities, the output piddle will be marked as bad and the associated R, G, and B color values will all be marked as bad.
+If C<hsl_to_rgb> encounters a bad value in any of the H, S, or V quantities, the output ndarray will be marked as bad and the associated R, G, and B color values will all be marked as bad.
 
 =cut
 
@@ -365,7 +365,7 @@ pp_def('rgb_to_hsv',
 
 Converts an RGB color triple to an HSV color triple.
 
-The first dimension of the piddles holding the hsv and rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the hsv and rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for usage
 
@@ -380,7 +380,7 @@ DOCUMENTATION
 
 =for bad
 
-If C<rgb_to_hsv> encounters a bad value in any of the R, G, or B values the output piddle will be marked as bad and the associated H, S, and V values will all be marked as bad.
+If C<rgb_to_hsv> encounters a bad value in any of the R, G, or B values the output ndarray will be marked as bad and the associated H, S, and V values will all be marked as bad.
 
 =cut
 
@@ -412,7 +412,7 @@ pp_def('hsv_to_rgb',
 
 Converts an HSV color triple to an RGB color triple
 
-The first dimension of the piddles holding the hsv and rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the hsv and rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for usage
 
@@ -427,7 +427,7 @@ DOCUMENTATION
 
 =for bad
 
-If C<hsv_to_rgb> encounters a bad value in any of the H, S, or V quantities, the output piddle will be marked as bad and the associated R, G, and B color values will all be marked as bad.
+If C<hsv_to_rgb> encounters a bad value in any of the H, S, or V quantities, the output ndarray will be marked as bad and the associated R, G, and B color values will all be marked as bad.
 
 =cut
 
@@ -568,7 +568,7 @@ pp_def('lab_to_lch',
 
 Converts an Lab color triple to an LCH color triple.
 
-The first dimension of the piddles holding the lab values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the lab values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for usage
 
@@ -583,7 +583,7 @@ DOCUMENTATION
 
 =for bad
 
-If C<lab_to_lch> encounters a bad value in any of the L, a, or b values the output piddle will be marked as bad and the associated L, C, and H values will all be marked as bad.
+If C<lab_to_lch> encounters a bad value in any of the L, a, or b values the output ndarray will be marked as bad and the associated L, C, and H values will all be marked as bad.
 
 =cut
 
@@ -614,7 +614,7 @@ pp_def('lch_to_lab',
 
 Converts an LCH color triple to an Lab color triple.
 
-The first dimension of the piddles holding the lch values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the lch values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for usage
 
@@ -629,7 +629,7 @@ DOCUMENTATION
 
 =for bad
 
-If C<lch_to_lab> encounters a bad value in any of the L, C, or H values the output piddle will be marked as bad and the associated L, a, and b values will all be marked as bad.
+If C<lch_to_lab> encounters a bad value in any of the L, C, or H values the output ndarray will be marked as bad and the associated L, a, and b values will all be marked as bad.
 
 =cut
 
@@ -647,11 +647,11 @@ pp_addpm(<<'EOD');
 
 Converts an RGB color triple to an XYZ color triple.
 
-The first dimension of the piddles holding the rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for bad
 
-If C<rgb_to_xyz> encounters a bad value in any of the R, G, or B values the output piddle will be marked as bad and the associated X, Y, and Z values will all be marked as bad.
+If C<rgb_to_xyz> encounters a bad value in any of the R, G, or B values the output ndarray will be marked as bad and the associated X, Y, and Z values will all be marked as bad.
 
 =for usage
 
@@ -680,11 +680,11 @@ sub PDL::rgb_to_xyz {
 
 Converts an XYZ color triple to an RGB color triple.
 
-The first dimension of the piddles holding the xyz and rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the xyz and rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for bad
 
-If C<xyz_to_rgb> encounters a bad value in any of the X, Y, or Z values the output piddle will be marked as bad and the associated R, G, and B values will all be marked as bad.
+If C<xyz_to_rgb> encounters a bad value in any of the X, Y, or Z values the output ndarray will be marked as bad and the associated R, G, and B values will all be marked as bad.
 
 =for usage
 
@@ -713,11 +713,11 @@ sub PDL::xyz_to_rgb {
 
 Converts an XYZ color triple to an Lab color triple.
 
-The first dimension of the piddles holding the xyz values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the xyz values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for bad
 
-If C<xyz_to_lab> encounters a bad value in any of the X, Y, or Z values the output piddle will be marked as bad and the associated L, a, and b values will all be marked as bad.
+If C<xyz_to_lab> encounters a bad value in any of the X, Y, or Z values the output ndarray will be marked as bad and the associated L, a, and b values will all be marked as bad.
 
 =for usage
 
@@ -746,11 +746,11 @@ sub PDL::xyz_to_lab {
 
 Converts an Lab color triple to an XYZ color triple.
 
-The first dimension of the piddles holding the lab values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the lab values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for bad
 
-If C<lab_to_xyz> encounters a bad value in any of the L, a, or b values the output piddle will be marked as bad and the associated X, Y, and Z values will all be marked as bad.
+If C<lab_to_xyz> encounters a bad value in any of the L, a, or b values the output ndarray will be marked as bad and the associated X, Y, and Z values will all be marked as bad.
 
 =for usage
 
@@ -779,11 +779,11 @@ sub PDL::lab_to_xyz {
 
 Converts an RGB color triple to an LCH color triple.
 
-The first dimension of the piddles holding the rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for bad
 
-If C<rgb_to_lch> encounters a bad value in any of the R, G, or B values the output piddle will be marked as bad and the associated L, C, and H values will all be marked as bad.
+If C<rgb_to_lch> encounters a bad value in any of the R, G, or B values the output ndarray will be marked as bad and the associated L, C, and H values will all be marked as bad.
 
 =for usage
 
@@ -812,11 +812,11 @@ sub PDL::rgb_to_lch {
 
 Converts an LCH color triple to an RGB color triple.
 
-The first dimension of the piddles holding the lch values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+The first dimension of the ndarrays holding the lch values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
 
 =for bad
 
-If C<lch_to_rgb> encounters a bad value in any of the L, C, or H values the output piddle will be marked as bad and the associated R, G, and B values will all be marked as bad.
+If C<lch_to_rgb> encounters a bad value in any of the L, C, or H values the output ndarray will be marked as bad and the associated R, G, and B values will all be marked as bad.
 
 =for usage
 
