@@ -736,7 +736,7 @@ sub PDL::rgb_to_xyz {
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
 
-    my @m = pdl( $RGB_SPACE->{$space}{m} )->dog;
+    my @m = PDL->topdl( $RGB_SPACE->{$space}{m} )->dog;
 
     return _rgb_to_xyz( $rgb, $RGB_SPACE->{$space}{gamma}, @m );
 }
@@ -769,7 +769,7 @@ sub PDL::xyz_to_rgb {
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
 
-    my @mstar = pdl( $RGB_SPACE->{$space}{mstar} )->dog;
+    my @mstar = PDL->topdl( $RGB_SPACE->{$space}{mstar} )->dog;
 
     return _xyz_to_rgb( $xyz, $RGB_SPACE->{$space}{gamma}, @mstar );
 }
@@ -802,7 +802,7 @@ sub PDL::xyz_to_lab {
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
 
-    my $w = pdl $RGB_SPACE->{$space}{white_point};
+    my $w = PDL->topdl($RGB_SPACE->{$space}{white_point});
 
     return _xyz_to_lab( $xyz, $w );
 }
@@ -835,7 +835,7 @@ sub PDL::lab_to_xyz {
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
 
-    my $w = pdl $RGB_SPACE->{$space}{white_point};
+    my $w = PDL->topdl($RGB_SPACE->{$space}{white_point});
 
     return _lab_to_xyz( $lab, $w );
 }
@@ -908,7 +908,10 @@ sub PDL::lch_to_rgb {
 
 =head2 add_rgb_space
 
-Supports adding custom RGB space definitions.
+Supports adding custom RGB space definitions. The C<m> and C<white_point>
+can be supplied as PDL ndarrays if desired. As of 0.202, you don't need
+to provide an C<mstar> since the inverse of the C<m> will be calculated
+(once) as a default.
 
 Usage:
 
@@ -932,23 +935,6 @@ Usage:
                      '0.993451333333334'
                    ]
                  ],
-          'mstar' => [
-                       [
-                         '2.74565437614039',
-                         '-0.969256810842655',
-                         '0.0112706581772173'
-                       ],
-                       [
-                         '-1.1358911781912',
-                         '1.87599300082369',
-                         '-0.113958877125197'
-                       ],
-                       [
-                         '-0.435056564214666',
-                         '0.0415556222493375',
-                         '1.01310694059653'
-                       ]
-                     ],
           'white_point' => [
                              '0.312713',
                              '0.329016'
