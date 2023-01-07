@@ -455,7 +455,7 @@ pp_def('xyY_to_xyz',
 
 
 pp_def('_rgb_to_xyz',
-    Pars => 'double rgb(c=3); double gamma(); double l(i=3); double m(i=3); double n(i=3); double [o]xyz(c=3)',
+    Pars => 'double rgb(c=3); double gamma(); double m(i=3,rows=3); double [o]xyz(c=3)',
     HandleBad => 1,
     Code => '
         /* First check for bad values */
@@ -466,7 +466,7 @@ pp_def('_rgb_to_xyz',
             /* skip to the next xyz triple */
         }
         else,) {
-            rgb2xyz($P(rgb), $gamma(), $P(l), $P(m), $P(n), $P(xyz));
+            rgb2xyz($P(rgb), $gamma(), &$m(i=>0,rows=>0), &$m(i=>0,rows=>1), &$m(i=>0,rows=>2), $P(xyz));
         }
     ',
     Doc => undef,
@@ -474,7 +474,7 @@ pp_def('_rgb_to_xyz',
 
 
 pp_def('_xyz_to_rgb',
-    Pars => 'double xyz(c=3); double gamma(); double l(i=3); double m(i=3); double n(i=3); double [o]rgb(c=3)',
+    Pars => 'double xyz(c=3); double gamma(); double mstar(i=3,rows=3); double [o]rgb(c=3)',
     HandleBad => 1,
     Code => '
         /* First check for bad values */
@@ -485,7 +485,7 @@ pp_def('_xyz_to_rgb',
             /* skip to the next rgb triple */
         }
         else,) {
-            xyz2rgb($P(xyz), $gamma(), $P(l), $P(m), $P(n), $P(rgb));
+            xyz2rgb($P(xyz), $gamma(), &$mstar(i=>0,rows=>0), &$mstar(i=>0,rows=>1), &$mstar(i=>0,rows=>2), $P(rgb));
         }
     ',
     Doc => undef,
@@ -668,9 +668,9 @@ sub PDL::rgb_to_xyz {
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
 
-    my @m = PDL->topdl( $RGB_SPACE->{$space}{m} )->dog;
+    my $m = PDL->topdl( $RGB_SPACE->{$space}{m} );
 
-    return _rgb_to_xyz( $rgb, $RGB_SPACE->{$space}{gamma}, @m );
+    return _rgb_to_xyz( $rgb, $RGB_SPACE->{$space}{gamma}, $m );
 }
 
 
@@ -701,9 +701,9 @@ sub PDL::xyz_to_rgb {
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
 
-    my @mstar = PDL->topdl( $RGB_SPACE->{$space}{mstar} )->dog;
+    my $mstar = PDL->topdl( $RGB_SPACE->{$space}{mstar} );
 
-    return _xyz_to_rgb( $xyz, $RGB_SPACE->{$space}{gamma}, @mstar );
+    return _xyz_to_rgb( $xyz, $RGB_SPACE->{$space}{gamma}, $mstar );
 }
 
 
