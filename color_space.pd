@@ -105,7 +105,7 @@ Or
 
 =head1 OPTIONS
 
-Some conversions require specifying the RGB space which includes gamma curve and white point definitions. Supported RGB space include (aliases in square brackets):
+Some conversions require specifying the RGB space which includes gamma curve and white point definitions. Supported RGB spaces include (aliases in square brackets):
 
     Adobe RGB (1998) [Adobe]
     Apple RGB [Apple]
@@ -125,7 +125,8 @@ Some conversions require specifying the RGB space which includes gamma curve and
     sRGB [709] [CIE Rec 709]
 
 You can also add custom RGB space definitions via the function add_rgb_space.
-
+Alternatively, as of 0.202 you can directly supply the function with a
+hash-ref in the same format.
 
 =head1 CONVERSIONS
 
@@ -658,19 +659,18 @@ If C<rgb_to_xyz> encounters a bad value in any of the R, G, or B values the outp
 Usage:
 
     my $xyz = rgb_to_xyz( $rgb, 'sRGB' );
+    my $xyz = rgb_to_xyz( $rgb, \%rgb_spec );
 
 =cut
 
 *rgb_to_xyz = \&PDL::rgb_to_xyz;
 sub PDL::rgb_to_xyz {
     my ($rgb, $space) = @_;
-
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
-
-    my $m = PDL->topdl( $RGB_SPACE->{$space}{m} );
-
-    return _rgb_to_xyz( $rgb, $RGB_SPACE->{$space}{gamma}, $m );
+    my $spec = ref($space) ? $space : $RGB_SPACE->{$space};
+    my $m = PDL->topdl( $spec->{m} );
+    return _rgb_to_xyz( $rgb, $spec->{gamma}, $m );
 }
 
 
@@ -691,19 +691,18 @@ If C<xyz_to_rgb> encounters a bad value in any of the X, Y, or Z values the outp
 Usage:
 
     my $rgb = xyz_to_rgb( $xyz, 'sRGB' );
+    my $rgb = xyz_to_rgb( $xyz, \%rgb_spec );
 
 =cut
 
 *xyz_to_rgb = \&PDL::xyz_to_rgb;
 sub PDL::xyz_to_rgb {
     my ($xyz, $space) = @_;
-
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
-
-    my $mstar = PDL->topdl( $RGB_SPACE->{$space}{mstar} );
-
-    return _xyz_to_rgb( $xyz, $RGB_SPACE->{$space}{gamma}, $mstar );
+    my $spec = ref($space) ? $space : $RGB_SPACE->{$space};
+    my $mstar = PDL->topdl( $spec->{mstar} );
+    return _xyz_to_rgb( $xyz, $spec->{gamma}, $mstar );
 }
 
 
@@ -724,18 +723,17 @@ If C<xyz_to_lab> encounters a bad value in any of the X, Y, or Z values the outp
 Usage:
 
     my $lab = xyz_to_lab( $xyz, 'sRGB' );
+    my $lab = xyz_to_lab( $xyz, \%rgb_spec );
 
 =cut
 
 *xyz_to_lab = \&PDL::xyz_to_lab;
 sub PDL::xyz_to_lab {
     my ($xyz, $space) = @_;
-
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
-
-    my $w = PDL->topdl($RGB_SPACE->{$space}{white_point});
-
+    my $spec = ref($space) ? $space : $RGB_SPACE->{$space};
+    my $w = PDL->topdl($spec->{white_point});
     return _xyz_to_lab( $xyz, $w );
 }
 
@@ -757,18 +755,17 @@ If C<lab_to_xyz> encounters a bad value in any of the L, a, or b values the outp
 Usage:
 
     my $xyz = lab_to_xyz( $lab, 'sRGB' );
+    my $xyz = lab_to_xyz( $lab, \%rgb_spec );
 
 =cut
 
 *lab_to_xyz = \&PDL::lab_to_xyz;
 sub PDL::lab_to_xyz {
     my ($lab, $space) = @_;
-
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
-
-    my $w = PDL->topdl($RGB_SPACE->{$space}{white_point});
-
+    my $spec = ref($space) ? $space : $RGB_SPACE->{$space};
+    my $w = PDL->topdl($spec->{white_point});
     return _lab_to_xyz( $lab, $w );
 }
 
@@ -790,18 +787,17 @@ If C<rgb_to_lch> encounters a bad value in any of the R, G, or B values the outp
 Usage:
 
     my $lch = rgb_to_lch( $rgb, 'sRGB' );
+    my $lch = rgb_to_lch( $rgb, \%rgb_spec );
 
 =cut
 
 *rgb_to_lch = \&PDL::rgb_to_lch;
 sub PDL::rgb_to_lch {
     my ($rgb, $space) = @_;
-
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
-
-    my $lab = xyz_to_lab( rgb_to_xyz( $rgb, $space ), $space );
-
+    my $spec = ref($space) ? $space : $RGB_SPACE->{$space};
+    my $lab = xyz_to_lab( rgb_to_xyz( $rgb, $spec ), $spec );
     return lab_to_lch( $lab );
 }
 
@@ -823,19 +819,18 @@ If C<lch_to_rgb> encounters a bad value in any of the L, C, or H values the outp
 Usage:
 
     my $rgb = lch_to_rgb( $lch, 'sRGB' );
+    my $rgb = lch_to_rgb( $lch, \%rgb_spec );
 
 =cut
 
 *lch_to_rgb = \&PDL::lch_to_rgb;
 sub PDL::lch_to_rgb {
     my ($lch, $space) = @_;
-
     croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
         if !$space;
-
-    my $xyz = lab_to_xyz( lch_to_lab( $lch ), $space );
-
-    return xyz_to_rgb( $xyz, $space );
+    my $spec = ref($space) ? $space : $RGB_SPACE->{$space};
+    my $xyz = lab_to_xyz( lch_to_lab( $lch ), $spec );
+    return xyz_to_rgb( $xyz, $spec );
 }
 
 =head2 add_rgb_space

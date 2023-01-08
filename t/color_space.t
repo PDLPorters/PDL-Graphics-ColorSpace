@@ -121,7 +121,8 @@ sub tapprox {
 
 	my $a_xyz = $lab->lab_to_xyz('sRGB');
 	is( tapprox( sum(abs($a_xyz - $xyz)), 0 ), 1, 'lab_to_xyz sRGB' ) or diag($a_xyz, $xyz);
-
+	$a_xyz = $lab->lab_to_xyz($PDL::Graphics::ColorSpace::RGBSpace::RGB_SPACE->{sRGB});
+	is( tapprox( sum(abs($a_xyz - $xyz)), 0 ), 1, 'lab_to_xyz with hash-ref' ) or diag($a_xyz, $xyz);
 
 	my $xyz_bad = $xyz->copy;
 	$xyz_bad->setbadat(0,1);

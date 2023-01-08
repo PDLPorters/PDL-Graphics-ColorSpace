@@ -1,4 +1,5 @@
 - no need to supply mstar for add_rgb_space
+- can supply add_rgb_space-format hash-ref to the relevant functions
 
 0.201 2022-02-14
 - more accurate dependencies
