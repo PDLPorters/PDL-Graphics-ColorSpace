@@ -115,18 +115,16 @@ void rgb2hsl( double *rgb, double *hsl )
 	if (delta == 0.0) {
 		hsl[0] = 0.0;
 		hsl[1] = 0.0;
+		return;
 	}
-	else {
-		/* saturation */
-		hsl[1] = delta / (hsl[2] <= 0.5 ? sum : (2.0 - sum));
-
-		/* compute hue */
-		hsl[0] = (r == max) ?  (g - b) / delta :
-			 (g == max) ?  2 + (b - r) / delta :
-			 4 + (r - g) / delta;
-		hsl[0] *= 60.0;
-		BOUNDED(hsl[0], 0, 360);
-    }
+	/* saturation */
+	hsl[1] = delta / (hsl[2] <= 0.5 ? sum : (2.0 - sum));
+	/* compute hue */
+	hsl[0] = (r == max) ?  (g - b) / delta :
+		 (g == max) ?  2 + (b - r) / delta :
+		 4 + (r - g) / delta;
+	hsl[0] *= 60.0;
+	BOUNDED(hsl[0], 0, 360);
 }
 
 
@@ -145,15 +143,13 @@ void rgb2hsv( double *rgb, double *hsv )
 
 	double delta = max - min;
 
-	if (delta > 0.0) {
-		/* got S */
-		hsv[1] = delta / max;
-	}
-	else {
+	if (delta <= 0.0) {
 		hsv[0] = 0;
 		hsv[1] = 0;
 		return;
 	}
+	/* got S */
+	hsv[1] = delta / max;
 
 	/* getting H */
 	hsv[0] = (r == max) ?  (g - b) / delta :
