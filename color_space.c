@@ -14,8 +14,13 @@ struct pixel {
 
 /*** util functions ***/
 double _apow (double a, double p) {
-	return a >= 0.0?   pow(a, p) : -pow(-a, p);
+	return pow(a >= 0.0 ? a : -a, p);
 }
+#define EXTREME(var, a, b, c, cmp) \
+  double var = a; \
+  if (b cmp var) var = b; \
+  if (c cmp var) var = c
+#define BOUNDED(v, min, max) while (v < min) v += max;while (v >= max) v -= max
 double _rad2deg( double rad )
 {
 	return 180.0 * rad / M_PI;
@@ -35,9 +40,7 @@ void _mult_v3_m33( struct pixel *p, double *m0, double *m1, double *m2, double *
 
 double rgb_quant( double p, double q, double h )
 {
-	while (h < 0)     { h += 360; }
-	while (h >= 360 ) { h -= 360; }
-
+	BOUNDED(h, 0, 360);
 	if (h < 60)       { return p + (q-p)*h/60; }
 	else if (h < 180) { return q; }
 	else if (h < 240) { return p + (q-p)*(240-h)/60; }
@@ -49,9 +52,7 @@ void rgb2cmyk( double *rgb, double *cmyk )
 {
 	struct pixel  cmy = { 1.0-rgb[0], 1.0-rgb[1], 1.0-rgb[2] };
 
-	double k = cmy.a;
-	if (cmy.b < k)  k = cmy.b;
-	if (cmy.c < k)  k = cmy.c;
+	EXTREME(k, cmy.a, cmy.b, cmy.c, <);
 
 	cmyk[0] = cmy.a - k;
 	cmyk[1] = cmy.b - k;
@@ -99,12 +100,8 @@ void rgb2hsl( double *rgb, double *hsl )
     double b = rgb[2];
 
 	/* compute the min and max */
-	double max = r;
-	if (max < g) max = g;
-	if (max < b) max = b;
-	double min = r;
-	if (g < min) min = g;
-	if (b < min) min = b;
+	EXTREME(max, r, g, b, >);
+	EXTREME(min, r, g, b, <);
 
 	/* Set the sum and delta */
 	double delta = max - min;
@@ -128,8 +125,7 @@ void rgb2hsl( double *rgb, double *hsl )
 			 (g == max) ?  2 + (b - r) / delta :
 			 4 + (r - g) / delta;
 		hsl[0] *= 60.0;
-		while (hsl[0] < 0.0)   { hsl[0] += 360; }
-		while (hsl[0] > 360.0) { hsl[0] -= 360; }
+		BOUNDED(hsl[0], 0, 360);
     }
 }
 
@@ -141,12 +137,8 @@ void rgb2hsv( double *rgb, double *hsv )
     double b = rgb[2];
 
 	/* compute the min and max */
-	double max = r;
-	if (max < g) max = g;
-	if (max < b) max = b;
-	double min = r;
-	if (g < min) min = g;
-	if (b < min) min = b;
+	EXTREME(max, r, g, b, >);
+	EXTREME(min, r, g, b, <);
 
 	/* got V */
 	hsv[2] = max;
@@ -168,8 +160,7 @@ void rgb2hsv( double *rgb, double *hsv )
 		 (g == max) ?  2 + (b - r) / delta :
 		 4 + (r - g) / delta;
 	hsv[0] *= 60;
-	while (hsv[0] < 0.0)    { hsv[0] += 360; }
-	while (hsv[0] >= 360.0) { hsv[0] -= 360; }
+	BOUNDED(hsv[0], 0, 360);
 }
 
 
@@ -301,8 +292,7 @@ void lab2lch( double *lab, double *lch )
 	lch[1] = sqrt( pow(lab[1], 2) + pow(lab[2], 2) );
 	lch[2] = _rad2deg( atan2( lab[2], lab[1] ) );
 
-	while (lch[2] < 0.0)   { lch[2] += 360; }
-	while (lch[2] > 360.0) { lch[2] -= 360; }
+	BOUNDED(lch[2], 0.0, 360.0);
 }
 
 void lch2lab( double *lch, double *lab )
