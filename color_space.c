@@ -233,14 +233,13 @@ void xyz2rgb( double *xyz, double gamma, double *m0, double *m1, double *m2, dou
 
 void xyY2xyz( double *xyY, double *xyz )
 {
-	xyz[1] = xyY[2];
-	if ( xyY[1] != 0.0 ) {
-		xyz[0] = xyY[0]  *  xyY[2]  /  xyY[1];
-		xyz[2] = (1.0 - xyY[0] - xyY[1])  *  xyY[2]  /  xyY[1];
-	}
-	else {
+	if ( xyY[1] == 0.0 ) {
 		xyz[0] = xyz[1] = xyz[2] = 0.0;
+		return;
 	}
+	xyz[0] = xyY[0]  *  xyY[2]  /  xyY[1];
+	xyz[1] = xyY[2];
+	xyz[2] = (1.0 - xyY[0] - xyY[1])  *  xyY[2]  /  xyY[1];
 }
 
 
