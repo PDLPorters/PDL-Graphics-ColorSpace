@@ -10,27 +10,26 @@ struct pixel {
 	double c;
 };
 
+#include "color_space.h"  /* Local decs */
 
-/*** function defs ***/
-double  rgb_quant( double p, double q, double h );
-void    rgb2cmyk( double *rgb, double *cmyk );
-void    cmyk2rgb( double *cmyk, double *rgb );
-void    rgb2hsl( double *rgb, double *hsl );
-void    hsl2rgb( double *hsl, double *rgb );
-void    rgb2hsv( double *rgb, double *hsv );
-void    hsv2rgb( double *hsv, double *rgb );
-void    rgb2xyz( double *rgb, double gamma, double *m0, double *m1, double *m2, double *xyz );
-void    xyz2rgb( double *xyz, double gamma, double *m0, double *m1, double *m2, double *rgb );
-double  _apow( double a, double p );
-double  _rad2deg( double rad );
-double  _deg2rad( double deg );
-void    _mult_v3_m33( struct pixel *p, double *m0, double *m1, double *m2, double *result );
-void    xyY2xyz( double *xyY, double *xyz );
-void    xyz2lab( double *xyz, double *w, double *lab );
-void	lab2lch( double *lab, double *lch );
-void    lch2lab( double *lch, double *lab );
-void    lab2xyz( double *lab, double *w, double *xyz );
-
+/*** util functions ***/
+double _apow (double a, double p) {
+	return a >= 0.0?   pow(a, p) : -pow(-a, p);
+}
+double _rad2deg( double rad )
+{
+	return 180.0 * rad / M_PI;
+}
+double _deg2rad( double deg )
+{
+    return deg * (M_PI / 180.0);
+}
+void _mult_v3_m33( struct pixel *p, double *m0, double *m1, double *m2, double *result )
+{
+	*result     = p->a  *  *m0      +  p->b  *  *m1      +  p->c  *  *m2;
+	*(result+1) = p->a  *  *(m0+1)  +  p->b  *  *(m1+1)  +  p->c  *  *(m2+1);
+	*(result+2) = p->a  *  *(m0+2)  +  p->b  *  *(m1+2)  +  p->c  *  *(m2+2);
+}
 
 /* ~~~~~~~~~~:> */
 
@@ -290,18 +289,6 @@ void xyz2rgb( double *xyz, double gamma, double *m0, double *m1, double *m2, dou
 }
 
 
-double _apow (double a, double p) {
-	return a >= 0.0?   pow(a, p) : -pow(-a, p);
-}
-
-void _mult_v3_m33( struct pixel *p, double *m0, double *m1, double *m2, double *result )
-{
-	*result     = p->a  *  *m0      +  p->b  *  *m1      +  p->c  *  *m2;
-	*(result+1) = p->a  *  *(m0+1)  +  p->b  *  *(m1+1)  +  p->c  *  *(m2+1);
-	*(result+2) = p->a  *  *(m0+2)  +  p->b  *  *(m1+2)  +  p->c  *  *(m2+2);
-}
-
-
 void xyY2xyz( double *xyY, double *xyz )
 {
 
@@ -392,15 +379,4 @@ void lab2xyz( double *lab, double *w, double *xyz )
 	*xyz     = xr * *w;
 	*(xyz+1) = yr * *(w+1);
 	*(xyz+2) = zr * *(w+2);
-}
-
-
-double _rad2deg( double rad )
-{
-	return 180.0 * rad / M_PI;
-}
-
-double _deg2rad( double deg )
-{
-    return deg * (M_PI / 180.0); 
 }
