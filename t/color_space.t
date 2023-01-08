@@ -207,6 +207,8 @@ sub tapprox {
 	my $a_lch = rgb_to_lch($rgb, 'BruceRGB');
 	my $lch = rgb_to_lch($rgb, 'custom_1');
 	is( tapprox( sum(abs($a_lch - $lch)), 0 ), 1, 'rgb_to_lch with add_rgb_space' ) or diag($a_lch, $lch);
+	eval {PDL::Graphics::ColorSpace::add_rgb_space( \%custom_space )};
+        like $@, qr/existing/, 'add duplicate croaks';
 }
 
 

@@ -16,9 +16,7 @@ Sourced from Graphics::ColorObject (Izvorski & Reibenschuh, 2005).
 =head1 Usage
 
     use Data::Dumper;
-
     print Dumper $PDL::Graphics::ColorSpace::RGBSpace::RGB_SPACE;
-
     print Dumper $PDL::Graphics::ColorSpace::RGBSpace::WHITE_POINT;
 
 =cut
@@ -417,26 +415,24 @@ $RGB_SPACE->{$_}{mstar} = $RGB_SPACE->{$_}{m}->inv
   for keys %$RGB_SPACE;
 
 # aliases
-$RGB_SPACE->{'Adobe'} = $RGB_SPACE->{'Adobe RGB (1998)'};
-$RGB_SPACE->{'601'}   = $RGB_SPACE->{'NTSC'};
-$RGB_SPACE->{'Apple'} = $RGB_SPACE->{'Apple RGB'};
+$RGB_SPACE->{Adobe} = $RGB_SPACE->{'Adobe RGB (1998)'};
+$RGB_SPACE->{'601'}   = $RGB_SPACE->{NTSC};
+$RGB_SPACE->{Apple} = $RGB_SPACE->{'Apple RGB'};
 $RGB_SPACE->{'CIE ITU'} = $RGB_SPACE->{'PAL/SECAM'};
-$RGB_SPACE->{'PAL'} = $RGB_SPACE->{'PAL/SECAM'};
-$RGB_SPACE->{'709'} = $RGB_SPACE->{'sRGB'};
-$RGB_SPACE->{'SMPTE'} = $RGB_SPACE->{'SMPTE-C'};
-$RGB_SPACE->{'CIE Rec 709'} = $RGB_SPACE->{'sRGB'};
-$RGB_SPACE->{'CIE Rec 601'} = $RGB_SPACE->{'NTSC'};
+$RGB_SPACE->{PAL} = $RGB_SPACE->{'PAL/SECAM'};
+$RGB_SPACE->{'709'} = $RGB_SPACE->{sRGB};
+$RGB_SPACE->{SMPTE} = $RGB_SPACE->{'SMPTE-C'};
+$RGB_SPACE->{'CIE Rec 709'} = $RGB_SPACE->{sRGB};
+$RGB_SPACE->{'CIE Rec 601'} = $RGB_SPACE->{NTSC};
 
+my @NEED_KEYS = grep $_ ne 'mstar', keys %{ $RGB_SPACE->{sRGB} };
 sub add_rgb_space {
 	my ($new_space) = @_;
-
+	my @dup = grep $RGB_SPACE->{$_}, sort keys %$new_space;
+	croak "Already existing RGB space definition with names @dup" if @dup;
 	while (my ($name, $profile) = each %$new_space) {
-		croak "There is an existing RGB space definition with the same name: $name"
-			if $RGB_SPACE->{$name};
-		for (grep $_ ne 'mstar', keys %{ $RGB_SPACE->{'sRGB'} }) {
-			carp "Missing definition for custom RGB space $name: $_"
-				unless defined $profile->{$_};
-		}
+		carp "Missing definition for custom RGB space $name: $_"
+		    for grep !defined $profile->{$_}, @NEED_KEYS;
 		my $copy = {%$profile};
 		$copy->{m} = PDL->topdl($copy->{m});
 		$copy->{mstar} = $copy->{m}->inv if !exists $copy->{mstar};
