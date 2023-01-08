@@ -21,6 +21,19 @@ double _apow (double a, double p) {
   if (b cmp var) var = b; \
   if (c cmp var) var = c
 #define BOUNDED(v, min, max) while (v < min) v += max;while (v >= max) v -= max
+#define CALC_HS(h, s, max, delta, r, g, b, satscale) \
+	/* set up a greyscale if rgb values are identical */ \
+	/* Note: automatically includes max = 0 */ \
+	if (delta <= 0.0) { \
+		h = s = 0; \
+		return; \
+	} \
+	s = delta / satscale; \
+	h = (r == max) ?  (g - b) / delta : \
+		 (g == max) ?  2 + (b - r) / delta : \
+		 4 + (r - g) / delta; \
+	h *= 60.0; \
+	BOUNDED(h, 0, 360)
 double _rad2deg( double rad )
 {
 	return 180.0 * rad / M_PI;
@@ -95,68 +108,32 @@ void hsl2rgb( double *hsl, double *rgb )
 
 void rgb2hsl( double *rgb, double *hsl )
 {
-    double r = rgb[0];
-    double g = rgb[1];
-    double b = rgb[2];
-
+	double r = rgb[0];
+	double g = rgb[1];
+	double b = rgb[2];
 	/* compute the min and max */
 	EXTREME(max, r, g, b, >);
 	EXTREME(min, r, g, b, <);
-
-	/* Set the sum and delta */
 	double delta = max - min;
 	double sum   = max + min;
-
 	/* luminance */
 	hsl[2] = sum / 2.0;
-
-	/* set up a greyscale if rgb values are identical */
-	/* Note: automatically includes max = 0 */
-	if (delta == 0.0) {
-		hsl[0] = 0.0;
-		hsl[1] = 0.0;
-		return;
-	}
-	/* saturation */
-	hsl[1] = delta / (hsl[2] <= 0.5 ? sum : (2.0 - sum));
-	/* compute hue */
-	hsl[0] = (r == max) ?  (g - b) / delta :
-		 (g == max) ?  2 + (b - r) / delta :
-		 4 + (r - g) / delta;
-	hsl[0] *= 60.0;
-	BOUNDED(hsl[0], 0, 360);
+	CALC_HS(hsl[0], hsl[1], max, delta, r, g, b, (hsl[2] <= 0.5 ? sum : (2.0 - sum)));
 }
 
 
 void rgb2hsv( double *rgb, double *hsv )
 {
-    double r = rgb[0];
-    double g = rgb[1];
-    double b = rgb[2];
-
+	double r = rgb[0];
+	double g = rgb[1];
+	double b = rgb[2];
 	/* compute the min and max */
 	EXTREME(max, r, g, b, >);
 	EXTREME(min, r, g, b, <);
-
 	/* got V */
 	hsv[2] = max;
-
 	double delta = max - min;
-
-	if (delta <= 0.0) {
-		hsv[0] = 0;
-		hsv[1] = 0;
-		return;
-	}
-	/* got S */
-	hsv[1] = delta / max;
-
-	/* getting H */
-	hsv[0] = (r == max) ?  (g - b) / delta :
-		 (g == max) ?  2 + (b - r) / delta :
-		 4 + (r - g) / delta;
-	hsv[0] *= 60;
-	BOUNDED(hsv[0], 0, 360);
+	CALC_HS(hsv[0], hsv[1], max, delta, r, g, b, max);
 }
 
 
