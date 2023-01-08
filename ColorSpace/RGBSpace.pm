@@ -442,4 +442,11 @@ sub add_rgb_space {
 	}
 }
 
+sub get_space {
+  my ($space) = @_;
+  croak "Please specify RGB Space ('sRGB' for generic JPEG images)!"
+    if !$space;
+  my $spec = ref($space) ? $space : $RGB_SPACE->{$space};
+}
+
 1;
