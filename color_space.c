@@ -189,21 +189,26 @@ void hsv2rgb( double *hsv, double *rgb )
 
 void rgb2xyz( double *rgb, double gamma, double *m0, double *m1, double *m2, double *xyz )
 {
-	double copy[] = { rgb[0], rgb[1], rgb[2] };
-	/* weighted RGB */
-	int i;
-	if (gamma < 0) {
-		/* special case for sRGB gamma curve */
-		for (i = 0; i < 3; i++)
-		  if ( fabs(copy[i]) <= 0.04045 ) { copy[i] /= 12.92; }
-		  else { copy[i] = _apow( (copy[i] + 0.055)/1.055, 2.4 ); }
-	}
-	else {
-		for (i = 0; i < 3; i++)
-		  copy[i] = _apow(copy[i], gamma);
-	}
-	struct pixel  p = { copy[0], copy[1], copy[2] };
+	rgb2linear(rgb, gamma, xyz);
+	struct pixel  p = { xyz[0], xyz[1], xyz[2] };
 	_mult_v3_m33( &p, m0, m1, m2, xyz );
+}
+
+
+void rgb2linear( double *rgb, double gamma, double *out )
+{
+	int i;
+	if (gamma < 0) { /* special case for sRGB gamma curve */
+	  for (i = 0; i < 3; i++)
+	    out[i] = fabs(rgb[i]) <= 0.04045 ? rgb[i] / 12.92 : _apow( (rgb[i] + 0.055)/1.055, 2.4 );
+	} else if (gamma == 1.0) { /* copy if different locations */
+	  if (rgb != out)
+	    for (i = 0; i < 3; i++)
+	      out[i] = rgb[i];
+	} else {
+	  for (i = 0; i < 3; i++)
+	    out[i] = _apow(rgb[i], gamma);
+	}
 }
 
 
@@ -211,15 +216,23 @@ void xyz2rgb( double *xyz, double gamma, double *m0, double *m1, double *m2, dou
 {
 	struct pixel  p = { xyz[0], xyz[1], xyz[2] };
 	_mult_v3_m33( &p, m0, m1, m2, rgb );
+	rgb2gamma(rgb, gamma, rgb);
+}
+
+
+void rgb2gamma( double *rgb, double gamma, double *out )
+{
 	int i;
-	if (gamma < 0) {
-		/* special case for sRGB gamma curve */
-		for (i = 0; i < 3; i++)
-		  rgb[i] = (fabs(rgb[i]) <= 0.0031308) ? 12.92 * rgb[i]  :  1.055 * _apow(rgb[i], 1.0/2.4) - 0.055;
-	}
-	else {
-		for (i = 0; i < 3; i++)
-		  rgb[i] = _apow(rgb[i], 1.0 / gamma);
+	if (gamma < 0) { /* special case for sRGB gamma curve */
+	  for (i = 0; i < 3; i++)
+	    out[i] = (fabs(rgb[i]) <= 0.0031308) ? 12.92 * rgb[i] : 1.055 * _apow(rgb[i], 1.0/2.4) - 0.055;
+	} else if (gamma == 1.0) { /* copy if different locations */
+	  if (rgb != out)
+	    for (i = 0; i < 3; i++)
+	      out[i] = rgb[i];
+	} else {
+	  for (i = 0; i < 3; i++)
+	    out[i] = _apow(rgb[i], 1.0 / gamma);
 	}
 }
 

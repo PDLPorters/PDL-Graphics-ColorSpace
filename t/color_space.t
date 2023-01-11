@@ -98,7 +98,7 @@ sub tapprox {
 	my $rgb_ = pdl(255, 10, 50) / 255;
 	my $a = rgb_to_xyz( $rgb_, 'Adobe' );
 	my $ans = pdl( 0.582073320819542, 0.299955362786115, 0.0546021884576833 ); 
-	ok( tapprox( $a, $ans), 'rgb_to_xyz Adobe' ) or diag($a, $ans);
+	ok( tapprox( $a, $ans), 'rgb_to_xyz Adobe' ) or diag($a, "\n", $ans);
 }
 
 # xyY_to_xyz
