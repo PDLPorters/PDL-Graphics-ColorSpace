@@ -12,9 +12,22 @@ pp_addpm({At=>'Top'}, <<'EOD');
 
 PDL::Graphics::ColorSpace
 
-=head1 VERSION
+=head1 SYNOPSIS
 
-0.1.0
+    use PDL::LiteF;
+    use PDL::IO::Pic;
+    use PDL::Graphics::ColorSpace;
+
+    my $image_rgb = PDL->rpic('photo.jpg') if PDL->rpiccan('JPEG');
+
+    # convert RGB value from [0,255] to [0,1]
+    $image_rgb = $image_rgb->double / 255;
+
+    my $image_xyz = $image_rgb->rgb_to_xyz( 'sRGB' );
+
+Or
+
+    my $image_xyz = rgb_to_xyz( $image_rgb, 'sRGB' );
 
 =head1 DESCRIPTION
 
@@ -85,23 +98,6 @@ The C* axis represents Chroma or "saturation". This ranges from 0 at the centre 
 If we take a horizontal slice through the centre, we see a coloured circle. Around the edge of the circle we see every possible saturated colour, or Hue. This circular axis is known as H° for Hue. The units are in the form of degrees° (or angles), ranging from 0 (red) through 90 (yellow), 180 (green), 270 (blue) and back to 0. 
 
 For more info, see L<http://www.colourphil.co.uk/lab_lch_colour_space.html>.
-
-=head1 SYNOPSIS
-
-    use PDL::LiteF;
-    use PDL::IO::Pic;
-    use PDL::Graphics::ColorSpace;
-
-    my $image_rgb = PDL->rpic('photo.jpg') if PDL->rpiccan('JPEG');
-
-    # convert RGB value from [0,255] to [0,1]
-    $image_rgb = $image_rgb->double / 255;
-
-    my $image_xyz = $image_rgb->rgb_to_xyz( 'sRGB' );
-
-Or
-
-    my $image_xyz = rgb_to_xyz( $image_rgb, 'sRGB' );
 
 =head1 OPTIONS
 
