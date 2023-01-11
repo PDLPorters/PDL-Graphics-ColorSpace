@@ -83,7 +83,7 @@ For more info, see L<http://www.chaospro.de/documentation/html/paletteeditor/col
 
 =head2 XYZ and xyY
 
-The CIE XYZ color space was derived the CIE RGB color space. XYZ are three hypothetical primaries. Y means brightness, Z is quasi-equal to blue stimulation, and X is a mix which looks like red sensitivy curve of cones.  All visible colors can be represented by using only positive values of X, Y, and Z. The main advantage of the CIE XYZ space (and any color space based on it) is that this space is completely device-independent.
+The CIE XYZ color space was derived the CIE RGB color space. XYZ are three hypothetical primaries. Y means brightness, Z is quasi-equal to blue stimulation, and X is a mix which looks like red sensitivity curve of cones.  All visible colors can be represented by using only positive values of X, Y, and Z. The main advantage of the CIE XYZ space (and any color space based on it) is that this space is completely device-independent.
 
 For more info, see L<http://en.wikipedia.org/wiki/CIE_1931_color_space>.
 
@@ -195,7 +195,7 @@ pp_def('rgb_to_cmyk',
 
 =for ref
 
-Converts an RGB color triple to an CYMK color quadruple.
+Converts an RGB color triple to an CMYK color quadruple.
 
 The first dimension of the ndarrays holding the rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...). The first dimension of the ndarrays holding the cmyk values must be size 4.
 
@@ -242,7 +242,7 @@ pp_def('cmyk_to_rgb',
 
 =for ref
 
-Converts an CYMK color quadruple to an RGB color triple
+Converts an CMYK color quadruple to an RGB color triple
 
 The first dimension of the ndarrays holding the cmyk values must be size 4, i.e. the dimensions must look like (4, m, n, ...). The first dimension of the ndarray holding the rgb values must be 3.
 
