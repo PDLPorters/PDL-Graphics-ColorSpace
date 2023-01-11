@@ -173,8 +173,9 @@ pp_addhdr('
 );
 
 pp_def('rgb_to_cmyk',
-    Pars => 'double rgb(c=3); double [o]cmyk(d=4)',
+    Pars => 'rgb(c=3); [o]cmyk(d=4)',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
@@ -220,8 +221,9 @@ BADDOC
 
 
 pp_def('cmyk_to_rgb',
-    Pars => 'double cmyk(d=4); double [o]rgb(c=3)',
+    Pars => 'cmyk(d=4); [o]rgb(c=3)',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(cmyk(d=>0)) || $ISBAD(cmyk(d=>1)) || $ISBAD(cmyk(d=>2)) || $ISBAD(cmyk(d=>3))) {
@@ -266,8 +268,9 @@ BADDOC
 
 
 pp_def('rgb_to_hsl',
-    Pars => 'double rgb(c=3); double [o]hsl(c=3)',
+    Pars => 'rgb(c=3); [o]hsl(c=3)',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
@@ -313,8 +316,9 @@ BADDOC
 
 
 pp_def('hsl_to_rgb',
-    Pars => 'double hsl(c=3); double [o]rgb(c=3)',
+    Pars => 'hsl(c=3); [o]rgb(c=3)',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(hsl(c=>0)) || $ISBAD(hsl(c=>1)) || $ISBAD(hsl(c=>2))) {
@@ -359,8 +363,9 @@ BADDOC
 
 
 pp_def('rgb_to_hsv',
-    Pars => 'double rgb(c=3); double [o]hsv(c=3)',
+    Pars => 'rgb(c=3); [o]hsv(c=3)',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
@@ -406,8 +411,9 @@ BADDOC
 
 
 pp_def('hsv_to_rgb',
-    Pars => 'double hsv(c=3); double [o]rgb(c=3)',
+    Pars => 'hsv(c=3); [o]rgb(c=3)',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(hsv(c=>0)) || $ISBAD(hsv(c=>1)) || $ISBAD(hsv(c=>2))) {
@@ -453,9 +459,10 @@ BADDOC
 
 
 pp_def('xyY_to_xyz',
-    Pars => 'double xyY(c=3); double [o]xyz(c=3)',
+    Pars => 'xyY(c=3); [o]xyz(c=3)',
     Doc => 'Internal function for white point calculation. Use it if you must.',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(xyY(c=>0)) || $ISBAD(xyY(c=>1)) || $ISBAD(xyY(c=>2))) {
@@ -472,8 +479,9 @@ pp_def('xyY_to_xyz',
 
 
 pp_def('_rgb_to_xyz',
-    Pars => 'double rgb(c=3); double gamma(); double m(i=3,rows=3); double [o]xyz(c=3)',
+    Pars => 'rgb(c=3); gamma(); m(i=3,rows=3); [o]xyz(c=3)',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
@@ -491,8 +499,9 @@ pp_def('_rgb_to_xyz',
 
 
 pp_def('_xyz_to_rgb',
-    Pars => 'double xyz(c=3); double gamma(); double mstar(i=3,rows=3); double [o]rgb(c=3)',
+    Pars => 'xyz(c=3); gamma(); mstar(i=3,rows=3); [o]rgb(c=3)',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(xyz(c=>0)) || $ISBAD(xyz(c=>1)) || $ISBAD(xyz(c=>2))) {
@@ -510,9 +519,10 @@ pp_def('_xyz_to_rgb',
 
 
 pp_def('_xyz_to_lab',
-    Pars => 'double xyz(c=3); double w(d=2);  double [o]lab(c=3)',
+    Pars => 'xyz(c=3); w(d=2);  [o]lab(c=3)',
     Doc => undef,
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* construct white point */
         double xyY[3] = { $w(d=>0), $w(d=>1), 1.0 };
@@ -536,10 +546,11 @@ pp_def('_xyz_to_lab',
 
 
 pp_def('_lab_to_xyz',
-    Pars => 'double lab(c=3); double w(d=2);  double [o]xyz(c=3)',
+    Pars => 'lab(c=3); w(d=2);  [o]xyz(c=3)',
     Doc => undef,
 
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* construct white point */
         double xyY[3] = { $w(d=>0), $w(d=>1), 1.0 };
@@ -563,8 +574,9 @@ pp_def('_lab_to_xyz',
 
 
 pp_def('lab_to_lch',
-    Pars => 'double lab(c=3); double [o]lch(c=3)',
+    Pars => 'lab(c=3); [o]lch(c=3)',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(lab(c=>0)) || $ISBAD(lab(c=>1)) || $ISBAD(lab(c=>2))) {
@@ -609,8 +621,9 @@ BADDOC
 
 
 pp_def('lch_to_lab',
-    Pars => 'double lch(c=3); double [o]lab(c=3)',
+    Pars => 'lch(c=3); [o]lab(c=3)',
     HandleBad => 1,
+    GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
         PDL_IF_BAD(if ($ISBAD(lch(c=>0)) || $ISBAD(lch(c=>1)) || $ISBAD(lch(c=>2))) {
