@@ -189,26 +189,20 @@ void hsv2rgb( double *hsv, double *rgb )
 
 void rgb2xyz( double *rgb, double gamma, double *m0, double *m1, double *m2, double *xyz )
 {
+	double copy[] = { rgb[0], rgb[1], rgb[2] };
 	/* weighted RGB */
-	struct pixel  p = { rgb[0], rgb[1], rgb[2] };
-
+	int i;
 	if (gamma < 0) {
 		/* special case for sRGB gamma curve */
-		if ( fabs(p.a) <= 0.04045 ) { p.a /= 12.92; }
-		else { p.a =_apow( (p.a + 0.055)/1.055, 2.4 ); }
-
-		if ( fabs(p.b) <= 0.04045 ) { p.b /= 12.92; }
-		else { p.b =_apow( (p.b + 0.055)/1.055, 2.4 ); }
-
-		if ( fabs(p.c) <= 0.04045 ) { p.c /= 12.92; }
-		else { p.c =_apow( (p.c + 0.055)/1.055, 2.4 ); }
+		for (i = 0; i < 3; i++)
+		  if ( fabs(copy[i]) <= 0.04045 ) { copy[i] /= 12.92; }
+		  else { copy[i] = _apow( (copy[i] + 0.055)/1.055, 2.4 ); }
 	}
 	else {
-		p.a = _apow(p.a, gamma);
-		p.b = _apow(p.b, gamma);
-		p.c = _apow(p.c, gamma);
+		for (i = 0; i < 3; i++)
+		  copy[i] = _apow(copy[i], gamma);
 	}
-
+	struct pixel  p = { copy[0], copy[1], copy[2] };
 	_mult_v3_m33( &p, m0, m1, m2, xyz );
 }
 
@@ -217,16 +211,15 @@ void xyz2rgb( double *xyz, double gamma, double *m0, double *m1, double *m2, dou
 {
 	struct pixel  p = { xyz[0], xyz[1], xyz[2] };
 	_mult_v3_m33( &p, m0, m1, m2, rgb );
+	int i;
 	if (gamma < 0) {
 		/* special case for sRGB gamma curve */
-		rgb[0] = (fabs(rgb[0]) <= 0.0031308) ? 12.92 * rgb[0]  :  1.055 * _apow(rgb[0], 1.0/2.4) - 0.055;
-		rgb[1] = (fabs(rgb[1]) <= 0.0031308) ? 12.92 * rgb[1]  :  1.055 * _apow(rgb[1], 1.0/2.4) - 0.055;
-		rgb[2] = (fabs(rgb[2]) <= 0.0031308) ? 12.92 * rgb[2]  :  1.055 * _apow(rgb[2], 1.0/2.4) - 0.055;
+		for (i = 0; i < 3; i++)
+		  rgb[i] = (fabs(rgb[i]) <= 0.0031308) ? 12.92 * rgb[i]  :  1.055 * _apow(rgb[i], 1.0/2.4) - 0.055;
 	}
 	else {
-		rgb[0] = _apow(rgb[0], 1.0 / gamma);
-		rgb[1] = _apow(rgb[1], 1.0 / gamma);
-		rgb[2] = _apow(rgb[2], 1.0 / gamma);
+		for (i = 0; i < 3; i++)
+		  rgb[i] = _apow(rgb[i], 1.0 / gamma);
 	}
 }
 
