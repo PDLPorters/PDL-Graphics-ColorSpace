@@ -1,4 +1,9 @@
-pp_add_exported('', 'rgb_to_cmyk', 'cmyk_to_rgb', 'hsl_to_rgb', 'rgb_to_hsl', 'rgb_to_hsv', 'hsv_to_rgb', 'rgb_to_xyz', 'xyz_to_rgb', 'xyY_to_xyz', 'xyz_to_lab', 'lab_to_xyz', 'lab_to_lch', 'lch_to_lab', 'rgb_to_lch', 'lch_to_rgb', 'lch_to_lab', 'add_rgb_space');
+pp_add_exported(
+  'rgb_to_xyz', 'xyz_to_rgb',
+  'xyz_to_lab', 'lab_to_xyz',
+  'rgb_to_lch', 'lch_to_rgb',
+  'add_rgb_space',
+);
 
 $PDL::Graphics::ColorSpace::VERSION = '0.201';
 
@@ -132,6 +137,20 @@ Some conversions, if not already included as functions, can be achieved by chain
 
     my $lab = xyz_to_lab( rgb_to_xyz( $rgb, 'sRGB' ), 'sRGB' );
 
+To generate a local diagram of what conversions are available between
+formats, using GraphViz, you can use this script:
+
+  use blib;
+  use PDL::Graphics::ColorSpace;
+  print "digraph {\n";
+  print join(' -> ', split /_to_/), "\n"
+    for grep !/^_/ && /_to_/, @PDL::Graphics::ColorSpace::EXPORT_OK;
+  print "}\n";
+  # then:
+  perl scriptname >d.dot; dot -Tsvg d.dot >d.svg; display d.svg
+
+(As of 0.202, this is everything to and from C<rgb> except C<lab>,
+which is only to and from C<xyz> and C<lch>)
 
 =cut
 
