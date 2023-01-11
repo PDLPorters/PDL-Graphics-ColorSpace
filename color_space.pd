@@ -125,6 +125,7 @@ Some conversions require specifying the RGB space which includes gamma curve and
     SMPTE-C [SMPTE]
     WideGamut
     sRGB [709] [CIE Rec 709]
+    lsRGB
 
 You can also add custom RGB space definitions via the function add_rgb_space.
 Alternatively, as of 0.202 you can directly supply the function with a
@@ -666,6 +667,73 @@ If C<lch_to_lab> encounters a bad value in any of the L, C, or H values the outp
 BADDOC
 );
 
+
+pp_def('rgb_to_linear',
+    Pars => 'rgb(c=3); gamma(); [o]out(c=3)',
+    HandleBad => 1,
+    GenericTypes=>['D'],
+    Code => '
+        PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
+            loop (c) %{ $SETBAD(out()); %}
+        }
+        else,) {
+            rgb2linear( $P(rgb), $gamma(), $P(out) );
+        }
+    ',
+    Doc => <<'DOCUMENTATION',
+=for ref
+
+Converts an RGB color triple (presumably with gamma) to an RGB color triple
+with linear values.
+
+=for usage
+
+Usage:
+
+    my $rgb_linear = rgb_to_linear( $gammaed, 2.2 );
+DOCUMENTATION
+    BadDoc => <<BADDOC,
+=for bad
+
+If C<rgb_to_linear> encounters a bad value in any of the R, G, or B
+values the output ndarray will be marked as bad and the associated R,
+G, and B values will all be marked as bad.
+BADDOC
+);
+
+
+pp_def('rgb_from_linear',
+    Pars => 'rgb(c=3); gamma(); [o]out(c=3)',
+    HandleBad => 1,
+    GenericTypes=>['D'],
+    Code => '
+        PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
+            loop (c) %{ $SETBAD(out()); %}
+        }
+        else,) {
+            rgb2gamma( $P(rgb), $gamma(), $P(out) );
+        }
+    ',
+    Doc => <<'DOCUMENTATION',
+=for ref
+
+Converts an RGB color triple (presumably linear) to an RGB color triple
+with the specified gamma.
+
+=for usage
+
+Usage:
+
+    my $gammaed = rgb_from_linear( $rgb_linear, 2.2 );
+DOCUMENTATION
+    BadDoc => <<BADDOC,
+=for bad
+
+If C<rgb_from_linear> encounters a bad value in any of the R, G, or B
+values the output ndarray will be marked as bad and the associated R,
+G, and B values will all be marked as bad.
+BADDOC
+);
 
 
 pp_addpm(<<'EOD');

@@ -81,16 +81,26 @@ sub tapprox {
 	ok( tapprox( $a_rgb_bad, $rgb), 'hsv_to_rgb with bad value' ) or diag($a_rgb_bad, $rgb);
 }
 
-# rgb_to_xyz
+# rgb_to_xyz and rgb_{to,from}_linear
 {   
 	my $rgb = pdl( [255,255,255],[0,0,0],[255,10,50],[1,48,199] ) / 255;
 	my $xyz = pdl( [0.950467757575757, 1, 1.08897436363636],
-				   [0,0,0],
-				   [0.419265223936783, 0.217129144548417, 0.0500096992920757],
-				   [0.113762127389896, 0.0624295703768394, 0.546353858701224] );
+	  [0,0,0],
+	  [0.419265223936783, 0.217129144548417, 0.0500096992920757],
+	  [0.113762127389896, 0.0624295703768394, 0.546353858701224] );
+	my $linear_ans = pdl( [1,1,1],[0,0,0],
+	  [1, 0.0030352698, 0.031896033],
+	  [0.00030352698, 0.029556834, 0.57112483] );
 
 	my $a_xyz = rgb_to_xyz( $rgb, 'sRGB' );
 	ok( tapprox( $a_xyz, $xyz), 'rgb_to_xyz sRGB' ) or diag($a_xyz, $xyz);
+
+	my $rgb_linear = rgb_to_linear($rgb, -1);
+	ok( tapprox( $rgb_linear, $linear_ans), 'rgb_to_linear sRGB' ) or diag($rgb_linear, $linear_ans);
+	my $rgb_regamma = rgb_from_linear($rgb_linear, -1);
+	ok( tapprox( $rgb_regamma, $rgb), 're-rgb_from_linear sRGB' ) or diag($rgb_regamma, $rgb);
+	my $a2_xyz = rgb_to_xyz( $rgb_linear, 'lsRGB' );
+	ok( tapprox( $a2_xyz, $xyz), 'rgb_to_xyz lsRGB' ) or diag($a2_xyz, $xyz);
 
 	my $a_rgb = xyz_to_rgb( $xyz, 'sRGB' );
 	ok( tapprox( $a_rgb, $rgb), 'xyz_to_rgb sRGB' ) or diag($a_rgb, $rgb);
