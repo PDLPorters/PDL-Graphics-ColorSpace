@@ -170,6 +170,29 @@ sub tapprox {
 	ok( tapprox( $a_rgb, $rgb), 'lch_to_rgb sRGB with bad value' ) or diag($a_rgb, $rgb);
 }
 
+# rgb_to_lab
+{
+	my $rgb = pdl([25, 10, 243], [0,0,1]) / 255;
+	my $lab = pdl([31.5634666908367, 74.943543, -102.31763],
+		          [ 0.0197916632671635, 0.13908209, -0.37848241]);
+
+	my $a_lab = rgb_to_lab($rgb, 'sRGB');
+	ok( tapprox( $a_lab, $lab ), 'rgb_to_lab sRGB' ) or diag($a_lab, $lab);
+
+	my $a_rgb = lab_to_rgb($lab, 'sRGB');
+	ok( tapprox( $a_rgb, $rgb ), 'lab_to_rgb sRGB' ) or diag($a_rgb, $rgb);
+
+	my $rgb_bad = $rgb->copy;
+	$rgb_bad->setbadat(1,1);
+	$a_lab = $rgb_bad->rgb_to_lab('sRGB');
+	ok( tapprox( $a_lab, $lab ), 'rgb_to_lab sRGB with bad value' ) or diag($a_lab, $lab);
+
+	my $lab_bad = $lab->copy;
+	$lab_bad->setbadat(1,1);
+	$a_rgb = $lab_bad->lab_to_rgb('sRGB');
+	ok( tapprox( $a_rgb, $rgb ), 'lab_to_rgb sRGB with bad value' ) or diag($a_rgb, $rgb);
+}
+
 # add_rgb_space
 {
 	my %custom_space = (

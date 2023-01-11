@@ -2,6 +2,7 @@ pp_add_exported(
   'rgb_to_xyz', 'xyz_to_rgb',
   'xyz_to_lab', 'lab_to_xyz',
   'rgb_to_lch', 'lch_to_rgb',
+  'rgb_to_lab', 'lab_to_rgb',
   'add_rgb_space',
 );
 
@@ -131,11 +132,11 @@ hash-ref in the same format.
 
 =head1 CONVERSIONS
 
-The full list of exported functions include rgb_to_cmyk, cmyk_to_rgb, rgb_to_hsl, hsl_to_rgb, rgb_to_hsv, hsv_to_rgb, rgb_to_xyz, xyz_to_rgb, xyY_to_xyz, xyz_to_lab, lab_to_xyz, lab_to_lch, lch_to_lab, rgb_to_lch, lch_to_rgb, lch_to_lab.
+Some conversions, if not already included as functions, can be achieved
+by chaining existing functions. For example, LCH to HSV conversion can
+be achieved by chaining lch_to_rgb and rgb_to_hsv:
 
-Some conversions, if not already included as functions, can be achieved by chaining existing functions. For example, RGB to Lab conversion can be achieved by chaining rgb_to_xyz and xyz_to_lab.
-
-    my $lab = xyz_to_lab( rgb_to_xyz( $rgb, 'sRGB' ), 'sRGB' );
+    my $hsv = rgb_to_hsv( lch_to_rgb( $lch, 'sRGB' ), 'sRGB' );
 
 To generate a local diagram of what conversions are available between
 formats, using GraphViz, you can use this script:
@@ -149,8 +150,8 @@ formats, using GraphViz, you can use this script:
   # then:
   perl scriptname >d.dot; dot -Tsvg d.dot >d.svg; display d.svg
 
-(As of 0.202, this is everything to and from C<rgb> except C<lab>,
-which is only to and from C<xyz> and C<lch>)
+(As of 0.202, this is everything to and from C<rgb>, plus C<xyz> <->
+C<lab> <-> C<lch>)
 
 =cut
 
@@ -835,6 +836,65 @@ sub PDL::lch_to_rgb {
     my $xyz = lab_to_xyz( lch_to_lab( $lch ), $spec );
     return xyz_to_rgb( $xyz, $spec );
 }
+
+
+=head2 rgb_to_lab
+
+=for ref
+
+Converts an RGB color triple to an LAB color triple.
+
+The first dimension of the ndarrays holding the rgb values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+
+=for bad
+
+If C<rgb_to_lab> encounters a bad value in any of the R, G, or B values the output ndarray will be marked as bad and the associated L, A, and B values will all be marked as bad.
+
+=for usage
+
+Usage:
+
+    my $lab = rgb_to_lab( $rgb, 'sRGB' );
+    my $lab = rgb_to_lab( $rgb, \%rgb_spec );
+
+=cut
+
+*rgb_to_lab = \&PDL::rgb_to_lab;
+sub PDL::rgb_to_lab {
+    my ($rgb, $space) = @_;
+    my $spec = get_space($space);
+    return xyz_to_lab( rgb_to_xyz( $rgb, $spec ), $spec );
+}
+
+
+=head2 lab_to_rgb
+
+=for ref
+
+Converts an LAB color triple to an RGB color triple.
+
+The first dimension of the ndarrays holding the lab values must be size 3, i.e. the dimensions must look like (3, m, n, ...).
+
+=for bad
+
+If C<lab_to_rgb> encounters a bad value in any of the L, A, or B values the output ndarray will be marked as bad and the associated R, G, and B values will all be marked as bad.
+
+=for usage
+
+Usage:
+
+    my $rgb = lab_to_rgb( $lab, 'sRGB' );
+    my $rgb = lab_to_rgb( $lab, \%rgb_spec );
+
+=cut
+
+*lab_to_rgb = \&PDL::lab_to_rgb;
+sub PDL::lab_to_rgb {
+    my ($lab, $space) = @_;
+    my $spec = get_space($space);
+    return xyz_to_rgb( lab_to_xyz( $lab, $spec ), $spec );
+}
+
 
 =head2 add_rgb_space
 
