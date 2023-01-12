@@ -176,7 +176,6 @@ pp_addhdr('
 pp_def('rgb_to_cmyk',
     Pars => 'rgb(c=3); [o]cmyk(d=4)',
     HandleBad => 1,
-    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -225,7 +224,6 @@ BADDOC
 pp_def('cmyk_to_rgb',
     Pars => 'cmyk(d=4); [o]rgb(c=3)',
     HandleBad => 1,
-    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
