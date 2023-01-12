@@ -176,6 +176,7 @@ pp_addhdr('
 pp_def('rgb_to_cmyk',
     Pars => 'rgb(c=3); [o]cmyk(d=4)',
     HandleBad => 1,
+    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -224,6 +225,7 @@ BADDOC
 pp_def('cmyk_to_rgb',
     Pars => 'cmyk(d=4); [o]rgb(c=3)',
     HandleBad => 1,
+    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -271,6 +273,7 @@ BADDOC
 pp_def('rgb_to_hsl',
     Pars => 'rgb(c=3); [o]hsl(c=3)',
     HandleBad => 1,
+    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -319,6 +322,7 @@ BADDOC
 pp_def('hsl_to_rgb',
     Pars => 'hsl(c=3); [o]rgb(c=3)',
     HandleBad => 1,
+    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -366,6 +370,7 @@ BADDOC
 pp_def('rgb_to_hsv',
     Pars => 'rgb(c=3); [o]hsv(c=3)',
     HandleBad => 1,
+    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -414,6 +419,7 @@ BADDOC
 pp_def('hsv_to_rgb',
     Pars => 'hsv(c=3); [o]rgb(c=3)',
     HandleBad => 1,
+    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -463,6 +469,7 @@ pp_def('xyY_to_xyz',
     Pars => 'xyY(c=3); [o]xyz(c=3)',
     Doc => 'Internal function for white point calculation. Use it if you must.',
     HandleBad => 1,
+    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -482,6 +489,7 @@ pp_def('xyY_to_xyz',
 pp_def('_rgb_to_xyz',
     Pars => 'rgb(c=3); gamma(); m(i=3,rows=3); [o]xyz(c=3)',
     HandleBad => 1,
+    Inplace => ['rgb'],
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -502,6 +510,7 @@ pp_def('_rgb_to_xyz',
 pp_def('_xyz_to_rgb',
     Pars => 'xyz(c=3); gamma(); mstar(i=3,rows=3); [o]rgb(c=3)',
     HandleBad => 1,
+    Inplace => ['xyz'],
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -523,6 +532,7 @@ pp_def('_xyz_to_lab',
     Pars => 'xyz(c=3); w(d=2);  [o]lab(c=3)',
     Doc => undef,
     HandleBad => 1,
+    Inplace => ['xyz'],
     GenericTypes=>['D'],
     Code => '
         /* construct white point */
@@ -551,6 +561,7 @@ pp_def('_lab_to_xyz',
     Doc => undef,
 
     HandleBad => 1,
+    Inplace => ['lab'],
     GenericTypes=>['D'],
     Code => '
         /* construct white point */
@@ -577,6 +588,7 @@ pp_def('_lab_to_xyz',
 pp_def('lab_to_lch',
     Pars => 'lab(c=3); [o]lch(c=3)',
     HandleBad => 1,
+    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -624,6 +636,7 @@ BADDOC
 pp_def('lch_to_lab',
     Pars => 'lch(c=3); [o]lab(c=3)',
     HandleBad => 1,
+    Inplace => 1,
     GenericTypes=>['D'],
     Code => '
         /* First check for bad values */
@@ -671,6 +684,7 @@ BADDOC
 pp_def('rgb_to_linear',
     Pars => 'rgb(c=3); gamma(); [o]out(c=3)',
     HandleBad => 1,
+    Inplace => ['rgb'],
     GenericTypes=>['D'],
     Code => '
         PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {
@@ -705,6 +719,7 @@ BADDOC
 pp_def('rgb_from_linear',
     Pars => 'rgb(c=3); gamma(); [o]out(c=3)',
     HandleBad => 1,
+    Inplace => ['rgb'],
     GenericTypes=>['D'],
     Code => '
         PDL_IF_BAD(if ($ISBAD(rgb(c=>0)) || $ISBAD(rgb(c=>1)) || $ISBAD(rgb(c=>2))) {

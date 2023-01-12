@@ -109,6 +109,8 @@ sub tapprox {
 	my $a = rgb_to_xyz( $rgb_, 'Adobe' );
 	my $ans = pdl( 0.582073320819542, 0.299955362786115, 0.0546021884576833 ); 
 	ok( tapprox( $a, $ans), 'rgb_to_xyz Adobe' ) or diag($a, "\n", $ans);
+	$rgb_->inplace->rgb_to_xyz( 'Adobe' );
+	ok( tapprox( $rgb_, $ans), 'rgb_to_xyz inplace' ) or diag($rgb_, "\n", $ans);
 }
 
 # xyY_to_xyz
