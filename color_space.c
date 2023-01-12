@@ -243,9 +243,9 @@ void xyY2xyz( double *xyY, double *xyz )
 		xyz[0] = xyz[1] = xyz[2] = 0.0;
 		return;
 	}
-	xyz[0] = xyY[0]  *  xyY[2]  /  xyY[1];
-	xyz[1] = xyY[2];
-	xyz[2] = (1.0 - xyY[0] - xyY[1])  *  xyY[2]  /  xyY[1];
+	xyz[0] = xyY[0]  /  xyY[1];
+	xyz[1] = 1.0;
+	xyz[2] = (1.0 - xyY[0] - xyY[1])  /  xyY[1];
 }
 
 
