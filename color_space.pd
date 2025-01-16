@@ -16,7 +16,7 @@ pp_addpm({At=>'Top'}, <<'EOD');
 
 =head1 NAME
 
-PDL::Graphics::ColorSpace
+PDL::Graphics::ColorSpace - colour-space conversions for PDL
 
 =head1 SYNOPSIS
 
